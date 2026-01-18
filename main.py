@@ -23,17 +23,14 @@ regimes = model.predict(X_scaled)
 df_results = df.copy()
 df_results['Regime'] = regimes
 
-# Convert the index to actual monthly dates
 df_results.index = pd.date_range(start='1990-01-31', periods=len(df_results), freq='M')
 
 fig, ax = plt.subplots(figsize=(15, 7))
 
-# Plot the Market Excess Returns (Mkt_RF) [cite: 137]
 ax.plot(df_results.index, df_results['Mkt_RF'], color='black', lw=1, label='Market Excess Return')
 
-# Shade the background for detected stress regimes
 for i in range(len(df_results)):
-    if df_results['Regime'].iloc[i] == 0: # Assuming 1 is your 'Stressed' regime
+    if df_results['Regime'].iloc[i] == 0: 
         ax.axvspan(df_results.index[i], 
                    df_results.index[i] + pd.Timedelta(days=30), 
                    color='red', alpha=0.3)
@@ -42,7 +39,4 @@ ax.set_title('Market Regimes: Shaded Areas Represent Stressed Environments')
 ax.set_ylabel('Monthly Return (%)')
 ax.legend()
 plt.show()
-# Check the average VIX for each regime
-print(df_results.groupby('Regime')['VIX'].mean())
-
 plt.plot()
